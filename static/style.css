@@ -1,0 +1,57 @@
+/* File: static/style.css */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #007BFF;
+    --secondary-color: #17A2B8;
+    --background-start: #E0F7FA;
+    --background-end: #B2EBF2;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --text-color: #343A40;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(-45deg, #E0F7FA, #B2EBF2, #80DEEA, #4DD0E1);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+/* This is the animation definition that makes the background move */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Redesigned Card with entry animation */
+.card {
+    background: var(--card-bg);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    backdrop-filter: blur(5px);
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* The animation for cards loading onto the page */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Helper class for full-screen vertical centering */
+.vh-100 {
+    min-height: 100vh;
+}

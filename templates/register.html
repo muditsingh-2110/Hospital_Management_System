@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Registration</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    <style> .hidden { display: none; } </style>
+</head>
+<body class="p-4">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h2 class="text-center mb-4">Patient Registration</h2>
+                <form method="POST" action="/register" id="registrationForm">
+                    <div class="mb-3">
+                        <label for="patientType" class="form-label">Patient Type</label>
+                        <select class="form-select" name="patientType" id="patientType" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="employee">Employee</option>
+                            <option value="nonemployee">Non-Employee</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Patient Name</label>
+                        <input type="text" class="form-control" name="name" id="name" required>
+                    </div>
+
+                    <div id="employeeFields" class="hidden">
+                        <div class="mb-3">
+                            <label for="emp_id" class="form-label">Employee ID</label>
+                            <input type="text" class="form-control" name="emp_id" id="emp_id" readonly>
+                        </div>
+                    </div>
+
+                    <div id="nonemployeeFields" class="hidden">
+                        <div class="mb-3">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" class="form-control" name="age" id="age">
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" name="gender" id="gender">
+                                <option value="">-- Select Gender --</option>
+                                <option>Male</option><option>Female</option><option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="symptoms" class="form-label">Symptoms / Problem</label>
+                        <select class="form-select" name="symptoms" id="symptoms" required>
+                            <option value="Fever">Fever</option><option value="Chest Pain">Chest Pain</option>
+                            <option value="Nose Problem">Nose Problem</option><option value="Cough">Cough</option>
+                            <option value="Headache">Headache</option><option value="Skin Rash">Skin Rash</option>
+                            <option value="Ear Pain">Ear Pain</option><option value="Stomach Pain">Stomach Pain</option>
+                            <option value="Fracture">Fracture</option><option value="Eye Problem">Eye Problem</option>
+                        </select>
+                    </div>
+
+                    <div id="uhidSection" class="hidden mb-3">
+                        <label for="uhid" class="form-label">Existing UHID</label>
+                        <input type="text" class="form-control" id="uhid" readonly>
+                    </div>
+
+                    <div class="d-grid">
+                       <button type="submit" class="btn btn-primary">Register Patient</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const patientTypeSelect = document.getElementById('patientType');
+    const nameInput = document.getElementById('name');
+    const empIdField = document.getElementById('emp_id');
+    const employeeFields = document.getElementById('employeeFields');
+    const nonemployeeFields = document.getElementById('nonemployeeFields');
+    const uhidSection = document.getElementById('uhidSection');
+    const uhidInput = document.getElementById('uhid');
+    const form = document.getElementById('registrationForm');
+
+    function resetFormView() {
+        employeeFields.classList.add('hidden');
+        nonemployeeFields.classList.add('hidden');
+        uhidSection.classList.add('hidden');
+        empIdField.value = ''; uhidInput.value = '';
+        document.getElementById('age').required = false; document.getElementById('gender').required = false;
+    }
+
+    patientTypeSelect.addEventListener('change', () => {
+        resetFormView();
+        const type = patientTypeSelect.value;
+        if (type === 'employee') {
+            employeeFields.classList.remove('hidden');
+        } else if (type === 'nonemployee') {
+            nonemployeeFields.classList.remove('hidden');
+            document.getElementById('age').required = true; document.getElementById('gender').required = true;
+        }
+    });
+
+    nameInput.addEventListener('blur', () => {
+        const name = nameInput.value.trim();
+        const type = patientTypeSelect.value;
+
+        if (name && type) {
+            const url = type === 'employee' ? '/check_uhid_employee' : '/check_uhid_nonemployee';
+            fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({name}) })
+            .then(response => response.json())
+            .then(data => {
+                if (type === 'employee') {
+                    if (data.emp_id) {
+                        empIdField.value = data.emp_id;
+                    } else {
+                        empIdField.value = '';
+                        Swal.fire('Employee Not Found', 'No employee exists with that name. Please verify the name.', 'error');
+                    }
+                }
+                if (data.uhid) {
+                    uhidInput.value = data.uhid;
+                    uhidSection.classList.remove('hidden');
+                } else {
+                    uhidSection.classList.add('hidden');
+                }
+            });
+        }
+    });
+
+    form.addEventListener('submit', (e) => {
+        if (patientTypeSelect.value === 'employee' && empIdField.value === '') {
+            e.preventDefault();
+            Swal.fire('Cannot Register', 'An employee must be validated before registration. Please enter a valid employee name.', 'warning');
+        }
+    });
+</script>
+</body>
+</html>

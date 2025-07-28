@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prescribe Medicine</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      background: #eef2f7;
+      padding: 40px;
+    }
+    .card {
+      max-width: 700px;
+      margin: auto;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 30px;
+      background: white;
+    }
+    h3 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .form-label {
+      font-weight: 500;
+    }
+    .btn-submit {
+      background-color: #4a69bd;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h3>📝 Prescribe Medicine</h3>
+
+    <form action="{{ url_for('submit_prescription') }}" method="POST">
+      <input type="hidden" name="uhid" value="{{ patient.uhid }}">
+      <input type="hidden" name="patient_type" value="{{ patient_type }}">
+
+      <div class="mb-3">
+        <label class="form-label">UHID:</label>
+        <input type="text" class="form-control" value="{{ patient.uhid }}" disabled>
+      </div>
+
+      {% if patient_type == 'employee' %}
+        <div class="mb-3">
+          <label class="form-label">Employee ID:</label>
+          <input type="text" class="form-control" value="{{ patient.emp_id }}" disabled>
+        </div>
+      {% else %}
+        <div class="mb-3">
+          <label class="form-label">Name:</label>
+          <input type="text" class="form-control" value="{{ patient.name }}" disabled>
+        </div>
+      {% endif %}
+
+      <div class="mb-3">
+        <label class="form-label">Symptoms:</label>
+        <input type="text" class="form-control" value="{{ patient.symptoms }}" disabled>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Select Medicine:</label>
+        <select class="form-select" name="medicine_name" required>
+          <option value="">-- Select Medicine --</option>
+          {% for med in medicines %}
+            <option value="{{ med.name }}">{{ med.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Doctor Name:</label>
+        <input type="text" class="form-control" name="doctor_name" placeholder="Dr. John Doe" required>
+      </div>
+
+      <button type="submit" class="btn btn-submit w-100">💊 Submit Prescription</button>
+    </form>
+  </div>
+</body>
+</html>

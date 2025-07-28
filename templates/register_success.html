@@ -1,0 +1,20 @@
+<!-- filepath: c:\Users\Y N Singh\Desktop\SECL\templates\register_success.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Successful</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="alert alert-success text-center">
+        Patient registered successfully!
+    </div>
+    <div class="text-center">
+        <a href="{{ url_for('reception_dashboard') }}" class="btn btn-primary">Go to Reception Dashboard</a>
+    </div>
+</div>
+</body>
+</html>
