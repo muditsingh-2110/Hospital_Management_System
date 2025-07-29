@@ -8,12 +8,12 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-# MySQL Configuration
+# MySQL Configuration for PythonAnywhere
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",
+    host="muditsingh21.mysql.pythonanywhere-services.com",
+    user="muditsingh21",
     password="ynsingh99*",
-    database="hospital_db"
+    database="muditsingh21$default"
 )
 
 # -------------------- HELPER FUNCTIONS & DECORATOR --------------------
