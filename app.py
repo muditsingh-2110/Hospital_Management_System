@@ -3,21 +3,16 @@ import mysql.connector
 import uuid
 from functools import wraps
 from datetime import timedelta
-import os # Make sure this import is at the top of your file
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-
 # MySQL Configuration
-# This will get the password from the environment variables set on your live server
-db_password = os.getenv("DB_PASSWORD")
-
 db = mysql.connector.connect(
-    host="localhost", # You will change this to your cloud DB host when live
+    host="localhost",
     user="root",
-    password=db_password, # Use the variable instead of the hardcoded string
+    password="ynsingh99*",
     database="hospital_db"
 )
 

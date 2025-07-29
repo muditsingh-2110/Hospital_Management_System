@@ -1,4 +1,4 @@
-# Python
+# Python files
 __pycache__/
 *.pyc
 
@@ -6,8 +6,3 @@ __pycache__/
 venv/
 env/
 .env
-
-# OS / IDE files
-.DS_Store
-.vscode/
-.idea/
